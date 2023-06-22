@@ -164,3 +164,22 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # defines which urls should have cors headers added to their http request
 # whichever url has api starts with will have cors header added to it's response
 CORS_URLS_REGEX = r"^api/.*$"
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    'formatters': {
+        "verbose": {
+            "format": "%(levelname)s %(name)-12s %(asctime)s %(module)s "
+            "%(process)d %(thread)d %(message)s"
+        }
+    },
+    "handlers": {
+        "console": {
+            "level": "DEBUG",
+            "class": "logging.StreamHandler",
+            "formatter": "verbose",
+        }
+    },
+    "root": {"level":"INFO", "handlers": ["console"]},
+}
