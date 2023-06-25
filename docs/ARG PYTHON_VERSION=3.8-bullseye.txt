@@ -1,0 +1,69 @@
+ARG PYTHON_VERSION=3.8-bullseye
+# multistage build
+
+# building wheels stage
+FROM python:${PYTHON_VERSION} as python
+
+FROM python as python-build-stage
+ARG BUILD_ENVIRONMENT=local
+
+RUN apk update && apk add --no-install-recommends -y \
+    build-essential \
+    libpq-dev
+    
+COPY ./requirements .
+
+# directory where thee wheel is present further we move the wheels to run-stage
+RUN pip wheel --wheel-dir /usr/src/app/wheels \
+    -r ${BUILD_ENVIRONMENT}.txt
+    
+
+# now the python run stage
+FROM python as python-run-stage
+ARG BUILD_ENVIRONMENT=local
+
+# location where or application be stored on docker container
+ARG APP_HOME=/app
+
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONBUFFERED 1
+ENV BUILD_ENV ${BUILD_ENVIRONMENT}
+
+WORKDIR ${APP_HOME}
+
+RUN apt-get update && apt-get-install --no-install-recommends -y \
+    libpq-dev \
+    gettext \
+    # rremoves unecessary packages and cleans up the package cache
+    # purge -> application with config files
+    && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
+    # removes package index file no longer needed after build dependency stage
+    && rm -rf /var/lib/apt/list/*
+    
+COPY --from=python-build-stage /usr/src/app/wheels /wheels/
+
+# using wheels to install dependencies
+# using pip
+# --no-index -> dont search python package index pypi when searching packages
+# find-links -> search package within the local syste, and not the global online search
+RUN pip install --no-cache-dir --no-index --find-links=/wheels/ /wheels/* \
+    && rm -rf /wheels/
+    
+COPY ./docker/local/django/entrypoint /entrypoint
+# so that entrypoint has a custom ending rather windows style line ending
+# using windows can cause issues
+RUN sed -i 's/\r$//g' /entrypoint
+# so entrypoint can be executed as a script/program in the docker image
+RUN chmod +x /entrypoint
+
+COPY ./docker/local/django/start /start
+# so that entrypoint has a custom ending rather windows style line ending
+# using windows can cause issues
+RUN sed -i 's/\r$//g' /start
+# so entrypoint can be executed as a script/program in the docker image
+RUN chmod +x /start
+
+# . -> current directory, destination is the working directory
+COPY . $(APP_HOME)
+
+ENTRYPOINT [ "/entrypoint" ]

@@ -1,0 +1,24 @@
+Multistage Build
+-> for each build create a different segmented build up in the Dockerfile
+-> can copy stage files
+-> basically creating a segmented piece of code within a single dockerfile
+-> for each purpose a different stage in the dockerfile
+
+Here one stage for building dependency wheels and other for running the application
+FROM -> specify base image form which new docker image will be built
+
+python wheels are binary distribution format for packaging and distributing python libraries and is more efficient than other methods
+
+RUN -> used to execute shell commands during build of docker image
+    -> allows us to install packages, configure system, setup env or other task
+libpq-dev -> developmental files for postgres needed to build psycopg2
+--wheel-dir will specify directory where wheel will be installed on the image
+-r specifies the requirements to be used here local is build_env so local.txt will be used to download and load sub-dependency / dependency of packages defined in local.txt
+
+PYTHONDONTWRITEBYTECODE-> skip write bytecodes when python imports a module
+			  python compiles sc to bytecode and saves it as PC file
+			  when importing a module
+
+PYTHONBUFFERED -> O/P directly to terminal without being buffered
+
+WORKDIR -> sets up working directory for run commands entrypoint copy and add instructions that follow it in dockerfile

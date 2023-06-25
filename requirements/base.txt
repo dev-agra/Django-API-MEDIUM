@@ -12,3 +12,4 @@ Pillow
 argon2-cffi
 pytz
 django-taggit
+whitenoise

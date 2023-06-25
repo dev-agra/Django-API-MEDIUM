@@ -150,7 +150,7 @@ ADMIN_URL = "supersecret/"
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = "/staticfiles/"
-STATC_ROOT = str(ROOT_DIR / "staticfiles")
+STATIC_ROOT = str(ROOT_DIR / "staticfiles")
 
 MEDIA_URL = "/mediafiles/"
 MEDIA_ROOT = str(ROOT_DIR / "media files")
