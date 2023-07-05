@@ -9,12 +9,12 @@ schema_view = get_schema_view(
     openapi.Info(
         title="Medium API",
         default_version="v1",
-        description="API endpoints for Medium API clone",
+        description="API endpoints for Medium API",
         contact=openapi.Contact(email="agradevu22@gmail.com"),
-        license=openapi.License=(name="MIT License"),
+        license=openapi.License(name="MIT License"),
     ),
     public=True,
-    permission_classes = (permissions.AllowAny)
+    permission_classes=(permissions.AllowAny,),
 )
 urlpatterns = [
     # cache disabled

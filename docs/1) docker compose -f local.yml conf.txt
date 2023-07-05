@@ -1,7 +1,0 @@
-1) docker compose -f local.yml config 
--> to check if config file is properly created
-
-2) docker compose -f local.yml up --build -d remove-orphans
--> to build image before running the containers
--> -d to run containers in the background
--> --remove-orphans to removecontainers whose services not defined in the compose file

@@ -67,3 +67,20 @@ RUN chmod +x /start
 COPY . $(APP_HOME)
 
 ENTRYPOINT [ "/entrypoint" ]
+
+
+# => Nginx
+-> webserver and load balancer and reverse proxy
+-> sits in front of web servers and encrypt/redirect the traffic
+-> request made to this rather than direct app
+-> man in middle type
+-> encrypt/decrypt done at Nginx
+-> scailng vertical -> adding more power
+-> scaling horizontally -> adding more containers/machines [scaling out]
+
+hoizontal -> request distributed to machines so nginx acts as load balancer
+routs client request to machines capable of fulfilling the request
+Round Robin used
+
+we'll use Path Based Load Balancer
+-> look at request and figure out which backend/frontend will be suitable
