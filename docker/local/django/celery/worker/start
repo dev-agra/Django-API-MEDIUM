@@ -1,0 +1,8 @@
+#!/bin/bash
+# restarts celery if changes are detected in the python code files we use watchfiles which is only recommended in production
+# automaticaaly restarts the processes if changes are detected
+
+set -o errexit
+set -o nounset
+
+exec watchfiles celery.__main__.main --args '-A mediumapi.celery worker -l INFO'

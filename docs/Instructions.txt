@@ -84,3 +84,28 @@ Round Robin used
 
 we'll use Path Based Load Balancer
 -> look at request and figure out which backend/frontend will be suitable
+
+currently Django 4+ is async able with ASGI requests but it has performance penalties and problem running efficient long running requests
+
+Asynchronous -> events/processes can independently execute without blocking 		each other's execution
+	     -> tasks can be initiated without waiting for a previous task 		to complete, run concurrently without affecting the overall 		outcome
+	     -> parallel processing-> web or networking
+ 
+Synchronous-> events/processes in sequential manner one after the other
+	   -> single threaded applications
+	-> can lead to unresponsive UI's and delays for complex 	 	   applicatiions when apps wait for external inputs or perform 	  	   heavy computing
+
+so we use Celery for asynchronous programming
+-> it needs message broker and result backend
+
+1) Message Broker
+-> Intermediary program used as transport for producing/consuming tasks
+
+2) Result Backend
+-> used to store result of a celery task
+
+we use Redis for both purposes 
+-> Redis is in memory data structure store that can be used as database, cache, memory, msg broker
+
+We use Flower to monitor, manage app API with Celery and celery email to send async emails
+

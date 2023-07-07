@@ -13,3 +13,8 @@ argon2-cffi
 pytz
 django-taggit
 whitenoise
+redis
+celery
+flower
+django-celery-email
+cached-property
