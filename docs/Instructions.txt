@@ -109,3 +109,5 @@ we use Redis for both purposes
 
 We use Flower to monitor, manage app API with Celery and celery email to send async emails
 
+We develop a signal so that the profile is created whenever a user is created
+-> signals are efficient ways to get work done and comms btwn two apps without having to know each other

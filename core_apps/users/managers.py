@@ -9,7 +9,7 @@ from django.utils.translation import gettext_lazy as _
 class CustomUserManager(BaseUserManager):
     def email_validator(self, email):
         try:
-            validate_email()
+            validate_email(email)
             return True
         except ValidationError:
             raise ValidationError(_("Users must provide a valid email address"))
@@ -34,7 +34,7 @@ class CustomUserManager(BaseUserManager):
         user.save(using=self._db)
         return user
     
-    def create_user(self, first_name, last_name, email, password, **extra_fields):
+    def create_superuser(self, first_name, last_name, email, password, **extra_fields):
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)  
         extra_fields.setdefault("is_active", True)
@@ -56,6 +56,6 @@ class CustomUserManager(BaseUserManager):
             self.email_validator(email)
         else:
             raise ValidationError(_("Superuser must have a email address"))
-        user = self.create_user(first_name, last_name, email, password)
+        user = self.create_user(first_name, last_name, email, password, **extra_fields)
         user.save(using=self.db)
         return user
