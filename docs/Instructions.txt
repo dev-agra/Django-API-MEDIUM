@@ -111,3 +111,16 @@ We use Flower to monitor, manage app API with Celery and celery email to send as
 
 We develop a signal so that the profile is created whenever a user is created
 -> signals are efficient ways to get work done and comms btwn two apps without having to know each other
+
+Authentication-> process to verify
+Authorization-> Verify what resource a user has access to and give them access
+
+TOken -> piece of data, has info to identify user to perform action
+types: JSON, web Token, JWT
+
+Access Token    -> client apps use to make secure connectioncalls to 			   backend API
+		->Allow client apps to access protected resources on 
+		   backend
+		-> those who hold it use it
+
+		-> unique and time bounded, reissue if time expires

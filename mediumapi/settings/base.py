@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import environ
+from datetime import timedelta
 
 env = environ.Env()
 
@@ -42,6 +43,11 @@ THIRD_PARTY_APPS = [
     "phonenumber_field",
     "drf_yasg",
     "djcelery_email",
+    "rest_framework.authtoken",
+    "allauth",
+    "allauth.socialaccount",
+    "dj_rest_auth",
+    "dj_rest_auth.registration"
         ]
 
 LOCAL_APPS = [
@@ -178,6 +184,65 @@ CELERY_TASK_SEND_SENT_EVENT = True
 
 if USE_TZ:
     CELERY_TIMEZONE = TIME_ZONE
+
+
+REST_FRAMEWORK = {
+    # list of classes used by the API view class
+    # other one is auth using JWT tokens
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "dj_rest_auth.jwt_auth.JWTCookieAuthentication",
+    ],
+    # list of permisssions classes to be used by API view class
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
+    ],
+    # 
+    "DEFAULT_FILTER_BACKENDS": [
+        "django_filters.rest_framework.DjangoFilterBackend",
+    ],
+}
+
+
+SIMPLE_JWT = {
+    # header that will be accepted by views that require authentication
+    """Bearer <token>"""
+    "AUTH_HEADER_TYPES": ("Bearer",),
+    # time limit for the token 30mins
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
+    # 
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    # Rotate the refresh token on each refresh request
+    "ROTATE_REFRESH_TOKENS": True,
+    "SIGNING_KEY": env("SIGNING_KEY"),
+    # user identifers contains user pieces to generate tokens
+    "USER_ID_FIELD": "id",
+    "USER_ID_CLAIM": "user_id",
+}
+
+REST_AUTH = {
+    "USE_JWT": True,
+    # name of the cookiee
+    "JWT_AUTH_COOKIE": "medium-access-token",
+    # name of the refresh cookiee
+    "JWT_AUTH_REFRESH_COOKIE": "medium-refresh-token",
+    "REGISTER_SERIALIZER": "core_apps.users.serializers.CustomRegisterSerializer",
+}
+
+AUTHENTICATION_BACKENDS = [
+    "allauth.account.auth_backends.AuthenticationBackend",
+    # default
+    "django.contrib.auth.backends.ModelBackend",
+]
+
+ACCOUNT_AUTHENTICATION_METHOD = "email"
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+ACCOUNT_CONFIRM_EMAIL_ON_GET = True
+ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1
+# since we are not using the username it's None
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+
+ACCOUNT_USERNAME_REQUIRED = False
 
 LOGGING = {
     "version": 1,
